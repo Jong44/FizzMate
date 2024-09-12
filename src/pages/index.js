@@ -5,6 +5,7 @@ import EmotionDialog from "@/components/global/emotion_dialog";
 import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [isLoaded, setIsLoaded] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedEmotion, setSelectedEmotion] = useState([]);
   const [message, setMessage] = useState("");
@@ -35,6 +36,10 @@ export default function Home() {
   }
 
   const sendMessage = async (e) => {
+    setIsLoaded(true);
+    if (message === "") {
+      return;
+    }
     e.preventDefault();
     const payloadMessage = message;
     // add message to list message
@@ -102,6 +107,7 @@ export default function Home() {
         }
       }
     }
+    setIsLoaded(false);
   }
 
   const getMessages = async () => {
@@ -177,7 +183,7 @@ export default function Home() {
               ? (
                 <form onSubmit={sendMessage} className="flex items-center gap-3 w-full h-[80px] px-10 max-md:px-5">
                   <input type="text" value={message} placeholder="Type a message" className="w-full p-3 border-2 border-gray-200 rounded-lg max-md:w-[80%]" onChange={(e) => setMessage(e.target.value)} />
-                  <button type="submit" className="flex items-center justify-center w-[50px] h-[50px] border rounded-lg bg-black">
+                  <button type="submit" className="flex items-center justify-center w-[50px] h-[50px] border rounded-lg bg-black" disabled={isLoaded}>
                     <Image src="/assets/icons/send.svg" alt="emoji" width={20} height={20} />
                   </button>
                 </form>
